@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="author" content="ckjs"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <title>异常处理</title>
+
+    <!-- Google fonts -->
+    <link rel="stylesheet"
+          href="http://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,900%7CRoboto+Slab:300,400%7CRoboto+Mono:400"/>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+
+    <!--<link rel="stylesheet" id="css-bootstrap" th:href="@{/css/bootstrapckjs.css}"></link>-->
+    <link rel="stylesheet" th:href="@{/css/app.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/ionicons.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/ckjs.css(t=2018011)}"></link>
+
+<body class="container">
+
+<!--code标志内的部分为要加载到主页框架当中的内容-->
+<code>
+    <div id="content">
+        <div class="container-fluid p-y-md">
+            <div class="card">
+                <div class="card-header">
+                    <!--<label>错误信息：</label>-->
+                    <!--<div class="alert alert-danger alert-dismissable"><p th:text="${message}"></p></div>-->
+
+                    <h4>错误信息：</h4>
+                </div>
+                <div class="card-block">
+                    <div class="alert alert-danger alert-dismissable"><p th:text="${message}"></p></div>
+                    <div class="alert alert-danger alert-dismissable" id="action-redirect" data-url="/tologin.do"><span id="time" style="background: #00BFFF">10</span>秒钟后自动<a href="/index" intercept="false">跳转到登录页面</a></div>
+
+                </div>
+                <div class="card-block">
+                    <br>
+                    <label><a href="javascript:void(0)" id = "showTrace">查看系统错误信息：</a></label>
+                    <div id="stackTrace" class="alert alert-danger alert-dismissable hidden">系统错误信息：<p
+                            th:text="${exmessage}"></p></br>报错堆栈信息：<p th:text="${stackTrace}"></p></div>
+                </div>
+            </div>
+        </div>
+        <script language="JavaScript" type="text/javascript">
+            var InterValObj;
+            function delayURL() {
+                var url = document.getElementById("action-redirect").getAttribute("data-url");
+                var delay = document.getElementById("time").innerHTML;
+                if(delay > 0) {
+                    delay--;
+                    document.getElementById("time").innerHTML = delay;
+                } else {
+                    // clearTimeout(InterValObj);
+                    window.top.location.href = url;
+                }
+                InterValObj = setTimeout("delayURL()", 1000);
+            }
+        </script>
+    </div>
+</code>
+
+<!-- 加载外部来源js文件 -->
+<script th:src="@{/js/jquery-2.2.4.min.js}"></script>
+<script th:src="@{/js/jquery.validate.min.js}"></script>
+<script th:src="@{/js/core/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/core/jquery.scrollLock.min.js}"></script>
+<script th:src="@{/js/core/jquery.placeholder.min.js}"></script>
+<script th:src="@{/js/core/jquery.placeholder.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/core/app.js(t=1001)}"></script>
+<script th:src="@{/js/pages/base_forms_validation.js(t=1004)}"></script>
+
+<!-- 加载自写js文件 -->
+<script th:src="@{/js/index.js(t=2018140)}"></script>
+<script th:src="@{/js/ckjs.js(t=2018140)}"></script>
+
+</body>
+
+</html>

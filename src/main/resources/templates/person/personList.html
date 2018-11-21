@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>personList</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/ckjs.css(t=2018019)}"></link>
+    <script th:src="@{/js/jquery-2.2.4.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/ckjs.js(t=2018029)}"></script>
+</head>
+<body class="container">
+
+<h3>基本信息</h3>
+<br>
+<!--定义一个访问类名称，简化工作，比如region/findAll.do，把region统一定义，每个页面复制后修改一处即可@{/(${requestname})/findAll.do(${requestname})}-->
+<div th:with="requestname='person'">
+<div class="with:80%">
+    <form class="form-horizontal" id="searchform" name="searchform" th:action="'/'+${requestname}+'/'+@{findAll.do}" method="post" >
+
+        <div class="form-group">
+            <div class="input-group" >
+                <input type="text" class="form-control" id="keyword" name="keyword" th:value="${keyword}" placeholder="请输入编码、名称、上级名称进行查询"/>
+                <span class="input-group-addon  input-group-addon-ckjs">
+                    <a onclick="document.getElementById('searchform').submit();" class="btn btn-ckjs btn-info">&nbsp&nbsp&nbsp&nbsp查    询&nbsp&nbsp&nbsp&nbsp</a>
+                </span>
+            </div>
+
+            <!--分页参数提交，-->
+            <input type="hidden" id="pageSize" name="pageSize" th:value="${page.pageSize}" />
+        </div>
+    </form>
+
+        <div class="with:80%">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>行号</th>
+                    <th>姓名</th>
+                    <th>昵称</th>
+                    <th>电话号码</th>
+                    <th>邮箱</th>
+                    <th>微信号</th>
+                    <th>性别</th>
+                    <th>出生日期</th>
+                    <th>地区id</th>
+                    <th>证件类型</th>
+                    <th>证件号码</th>
+                    <th>默认角色</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr  th:each="person ,dataStat: ${dataList}" >
+                    <th scope="row" th:text="${dataStat.count}" > 1</th>
+                    <td th:text="${person.name}">name</td>
+                    <td th:text="${person.nickname}">nickname</td>
+                    <td th:text="${person.phone}">phone</td>
+                    <td th:text="${person.email}">email</td>
+                    <td th:text="${person.wechatnumber}">wechatnumber</td>
+                    <!--<td th:text="${person.gender}">gender</td>-->
+                    <td th:text="${person.gender==null?'':typeMap[person.gender]}">gender</td>
+                    <td th:text="${#dates.format(person.birthdate,'yyyy-MM-dd')}">birthdate</td>
+                    <td th:text="${person.regionname}">regionid</td>
+                    <td th:text="${person.identitytype}">identitytype</td>
+                    <td th:text="${person.identitynumber}">identitynumber</td>
+                    <td th:text="${person.role}">role</td>
+                    <td><a th:href="'/'+${requestname}+'/'+@{findById.do(id=${person.id},keyword=${keyword})}">查看</a></td>
+                </tr>
+                <tr>
+                    <td colspan="12"><p class="text-right text-info" th:if="${dataList.size()}==0">没有所查询的记录，请点击新增按钮添加数据。</p></td>
+                    <td> <a href="/requestname/toAdd.do" th:href="'/'+${requestname}+'/'+@{toAdd.do(keyword=${keyword})}" class="btn btn-info">新&nbsp;&nbsp;增</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!--分页-->
+        <div id="pagediv">
+            <ul class="pagination list-inline" >
+                <li th:if="${page.pageNum>3}"><a href="#" data-pageNum="1" data-pageSize="10" th:attr="data-pageNum=1,data-pageSize=${page.getPageSize()}">&laquo;</a></li>
+                <!--<li class="active"><a href="#">1</a></li>
+                <li class="disabled"><a href="#">2</a></li>-->
+                <li th:if="${page.getPageNum()-3>1}"><a href="#" data-pageNum="1" data-pageSize="10" th:attr="data-pageNum=${page.getPageNum()-4},data-pageSize=${page.getPageSize()}">…</a></li>
+                <li class="pagination form-inline" th:each="i : ${#numbers.sequence((page.getPageNum()-3<=0)?1:(page.getPageNum()-3),page.getPages()==0?1:((page.getPages()-page.getPageNum())>=3?page.getPageNum()+3:page.getPages()))}" th:class="${page.getPageNum()==i}?'active':''">
+                <a href="#" th:text="${i}" data-pageNum="1" data-pageSize="10" th:attr="data-pageNum=${i},data-pageSize=${page.getPageSize()}">5</a>
+                </li>
+                <li th:if="${page.getPages()-page.getPageNum()>3}"><a href="#" data-pageNum="1" data-pageSize="10" th:attr="data-pageNum=${page.getPageNum()+4},data-pageSize=${page.getPageSize()}">…</a></li>
+                <li th:if="${(page.pages - page.pageNum)>3}"><a href="#" data-pageNum="1" data-pageSize="10" th:attr="data-pageNum=${page.getPages()},data-pageSize=${page.getPageSize()}">&raquo;</a></li>
+                <li>&nbsp;&nbsp;</li>
+            </ul>
+            <ul class="pagination list-inline" >
+                <li><a>总条数：<span th:text="${page.getTotal()}"></span>&nbsp;&nbsp;总页数：<span th:text="${page.getPages()}"></span></a></li>
+                <li><a>每页显示条数：<input type="text" class="input-ckjs" id="pageSizeInput" name="pageSize" th:value="*{page.pageSize}"/></a></li>
+            </ul>
+            <!--当前页参数不放入form表单，查询条件变更时重头显示。-->
+            <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}" />
+
+        </div>
+        <!--分页结束-->
+
+</div>
+</div>
+</body>
+</html>

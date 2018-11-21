@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>type</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/ckjs.css}"></link>
+    <script th:src="@{/js/jquery-2.2.4.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/ckjs.js(t=2018101)}"></script>
+</head>
+<body class="container">
+<code>
+<h3>类型设置</h3>
+<br>
+<div class="with:80%" id="content">
+    <form class="form-horizontal"   th:action="@{/type/edit.do}" th:object="${type}"  method="post" >
+        <input type="hidden" name="mark" th:value="${mark}" />
+        <input type="hidden" name="keyword" th:value="${keyword}" />
+        <input type="hidden" name="id" th:value="${mark}=='add'?'':*{id}" />
+
+        <div class="form-group" name="sign">
+            <div class="input-group">
+                <span class="input-group-addon">标识：</span>
+                <input type="text" class="form-control form-control-right" id="sign" name="sign" th:value="${mark}=='add'?'':*{sign}" th:placeholder="${mark}=='view'?'':'输入10位以内大写字母'" th:attr="isreadonly=(${mark}=='view'?'readonly':'')" />
+            </div>
+        </div>
+
+        <div class="form-group" name="code">
+            <div class="input-group">
+                <span class="input-group-addon">编号：</span>
+                <input type="text" class="form-control form-control-right"  id="code" name="code" th:value="${mark}=='add'?'':*{code}" th:placeholder="${mark}=='view'?'':'输入10位以内大写字母'" th:attr="isreadonly=(${mark}=='view'?'readonly':'')"/>
+            </div>
+        </div>
+
+        <div class="form-group" name="name">
+            <div class="input-group">
+                <span class="input-group-addon">名称：</span>
+                <input type="text" class="form-control form-control-right"  id="name" name="name" th:value="${mark}=='add'?'':*{name}" th:placeholder="${mark}=='view'?'':'请输入名称'"  th:attr="isreadonly=(${mark}=='view'?'readonly':'')"/>
+            </div>
+        </div>
+
+        <div class="form-group" name="number">
+            <div class="input-group">
+                <span class="input-group-addon">顺序：</span>
+                <input type="text" class="form-control form-control-right"  id="number" name="number" th:value="${mark}=='add'?'':*{number}" th:placeholder="${mark}=='view'?'':'请输入顺序数字，从小到大排序'"  th:attr="isreadonly=(${mark}=='view'?'readonly':'')"/>
+            </div>
+        </div>
+
+        <div class="form-group" name="remark">
+            <div class="input-group">
+                <span class="input-group-addon">描述：</span>
+                <input type="text" class="form-control form-control-right"  id="remark" name="remark" th:value="${mark}=='add'?'':*{remark}" th:placeholder="${mark}=='view'?'':'请输入描述'"  th:attr="isreadonly=(${mark}=='view'?'readonly':'')"/>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="提交" class="btn btn-info" th:unless="${mark}=='view'"/>
+                &nbsp; &nbsp; &nbsp;
+                <a href="javascript:history.go(-1);"  class="btn btn-info" th:unless="${mark}=='view'">取消</a>
+                <a href="/type/toEdit.do" th:href="@{/type/toEdit.do(id=*{id},keyword=${keyword})}" class="btn btn-info" th:if="${mark}=='view'" >修改</a>
+                &nbsp; &nbsp; &nbsp;
+                <a href="/type/toEdit.do" th:href="@{/type/delete.do(id=*{id},keyword=${keyword})}" class="btn btn-info" th:if="${mark}=='view'" onclick="javascript:if(confirm('删除后无法恢复，请确定是否删除？')) { return true;}else{return false;};">删除</a>
+                &nbsp; &nbsp; &nbsp;
+                <a href="/type/findAll.do" th:href="@{/type/findAll.do(keyword=${keyword})}" class="btn btn-info" th:if="${mark}=='view'">返回列表</a>
+            </div>
+
+        </div>
+    </form>
+</div>
+</code>
+</body>
+</html>

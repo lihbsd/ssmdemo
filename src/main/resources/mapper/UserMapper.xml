@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ckjs.ssmdemo.dao.UserDao">
+
+
+    <select id="findByLoginName" resultType="User">
+        SELECT user.*  ,person.name as personname,role.rolename as rolename FROM t_user user left join t_person person  on user.personid = person.id left join t_role role on user.roleid=role.id where user.isdelete = 0 and (user.username = #{loginName} or user.phone = #{loginName} or user.email = #{loginName})
+    </select>
+
+    <select id="findFromAjax" resultType="User">
+        SELECT user.*  ,person.name as personname,role.rolename as rolename FROM t_user user left join t_person person  on user.personid = person.id left join t_role role on user.roleid=role.id where user.isdelete = 0 and (concat(user.username) LIKE '%' #{keyword} '%' or user.phone = #{keyword} or user.email = #{keyword} ) order by user.modifytime desc
+    </select>
+
+    <select id="findByKeyword" resultType="User">
+         SELECT user.*  ,person.name as personname,role.rolename as rolename FROM t_user user left join t_person person  on user.personid = person.id left join t_role role on user.roleid=role.id where user.isdelete = 0 and (concat(user.username) LIKE '%' #{keyword} '%' or user.phone = #{keyword} or user.email = #{keyword} ) order by user.modifytime desc
+    </select>
+
+    <select id="findById" resultType="User">
+        SELECT user.*  ,person.name as personname,role.rolename as rolename FROM t_user user left join t_person person  on user.personid = person.id left join t_role role on user.roleid=role.id where user.isdelete = 0 and user.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="User">
+        insert into t_user(personid,username,password,salt,phone,email,securityquestion1,securityanswer1,securityquestion2,securityanswer2,securityquestion3,securityanswer3,roleid,creator,modifier)
+        values(#{personid},#{username},#{password},#{salt},#{phone},#{email},#{securityquestion1},#{securityanswer1},#{securityquestion2},#{securityanswer2},#{securityquestion3},#{securityanswer3},#{roleid},#{creator},#{modifier})
+    </insert>
+
+
+    <update id="update" parameterType="User" >
+        update t_user set personid=#{personid},username=#{username},phone=#{phone},email=#{email},securityquestion1=#{securityquestion1},securityanswer1=#{securityanswer1},securityquestion2=#{securityquestion2},securityanswer2=#{securityanswer2},securityquestion3=#{securityquestion3},securityanswer3=#{securityanswer3},roleid=#{roleid},modifier=#{modifier} where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="User" >
+        update t_user set isdelete=1,modifier=#{modifier} where id=#{id}
+    </update>
+
+    <select id="validateRight" resultType="User" >
+        select u.* from t_user u left join t_user_role ur on u.id=ur.userid left join t_role_permission rp on rp.roleid=ur.roleid left join t_permission p on p.id=rp.permissionid where u.id = #{userid} and p.item = #{item} and p.permission = #{permission}
+    </select>
+
+
+</mapper>

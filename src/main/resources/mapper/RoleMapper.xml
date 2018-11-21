@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ckjs.ssmdemo.dao.RoleDao">
+
+    <select id="findByRoletype" resultType="Role">
+        SELECT a.*  FROM t_role a where a.isdelete = 0 and roletype=#{roletype} order by a.modifytime desc
+    </select>
+
+    <select id="findFromAjax" resultType="Role">
+        SELECT a.*  FROM t_role a where a.isdelete = 0 and (concat(a.rolename) LIKE '%' #{keyword} '%' ) order by roletype,a.modifytime
+    </select>
+
+    <select id="findByKeyword" resultType="Role">
+         SELECT a.*  FROM t_role a where a.isdelete = 0 and (concat(a.rolename) LIKE '%' #{keyword} '%' ) order by roletype,a.modifytime
+    </select>
+
+    <select id="findById" resultType="Role">
+        SELECT a.*  FROM t_role a where a.isdelete = 0 and a.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Role">
+        insert into t_role(roletype,rolename,remark,creator,modifier)
+        values(#{roletype},#{rolename},#{remark},#{creator},#{modifier})
+    </insert>
+
+
+    <update id="update" parameterType="Role" >
+        update t_role set roletype=#{roletype},rolename=#{rolename},remark=#{remark},modifier=#{modifier} where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="Role" >
+        update t_role set isdelete=1,modifier=#{modifier} where id=#{id}
+    </update>
+
+</mapper>

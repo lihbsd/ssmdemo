@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="author" content="ckjs"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <!--$$edit$$:修改页面标题-->
+    <title>角色授权</title>
+
+    <link rel="stylesheet" id="css-bootstrap" th:href="@{/css/bootstrap.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/app.css(t=2018003)}"></link>
+    <link rel="stylesheet" th:href="@{/css/ionicons.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/googlefonts.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/ckjs.css(t=2018011)}"></link>
+
+    <!--这里写当前页面特有的CSS格式-->
+    <style>
+    </style>
+</head>
+
+<body class="app-ui layout-has-drawer layout-has-fixed-header">
+<div class="app-layout-canvas">
+    <div class="app-layout-container">
+        <main class="app-layout-content">
+            <!--code标志内的部分为要加载到主页框架当中的内容-->
+            <code>
+                <!--$$edit$$:修改模块标识-->
+                <div id="content" th:with="requestname='role'">
+                    <!-- Page Content -->
+                    <div class="container-fluid p-y-md">
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <!-- $$edit$$:修改页面标题 -->
+                                        <h4><strong>角色授权</strong></h4>
+                                        <ul class="card-actions ">
+                                            <li>
+                                                <!--<a class="js-tooltip" title="返回列表" href="/role/list.do"><i-->
+                                                        <!--class="ion-android-arrow-back"></i></a>-->
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-block">
+                                        <!-- jQuery Validation (.js-validation-material class is initialized in js/pages/base_forms_validation.js) -->
+                                        <!-- For more examples please check https://github.com/jzaefferer/jquery-validation -->
+
+                                        <!-- $$edit$$:修改object -->
+                                        <!--<form class="js-validation-material form-horizontal m-t-sm"-->
+                                              <!--th:action="${'/'+requestname+'/'+mark+'.do'}" th:object="${role}"-->
+                                              <!--method="post">-->
+
+                                            <!--文本输入框-->
+                                            <div class="form-group">
+                                                <div class="col-sm-9">
+                                                    <div class="form-material">
+                                                        <!--动态选择框实际上传的数据-->
+                                                        <!--<input type="hidden" id="regionid" name="regionid" th:value="111" />-->
+                                                        <input type="hidden" id="roleid" name="roleid" th:value="${mark}=='add'?'':${role.id}" validate="required:true" validatemsg="required: 请选择角色"/>
+                                                        <!--动态选择框，显示名称，foreignkey属性触发动态加载选项，并指定选项的来源对象-->
+                                                        <input class="form-control" type="text" id="rolename" name="rolename" forid="roleid" forname="rolename" foreignkey="role" data-href="/role/toempower.do?roleid=##key##" data-intercept="true" th:value="${mark}=='add'?'':${role.rolename}" th:placeholder="${mark}=='view'?'':'请选择...'"
+                                                               />
+                                                        <!--forname,forid属性用来指定选择选项后要写入的字段id，  id输入框、显示输入框、以及ul选项都通过forid，forname字段关联，属性内容不能错误-->
+                                                        <ul class="list-unstyled hidden" forid="roleid" forname="rolename">
+                                                            <li><a href="#" class="list-group-item text-warning" >请输入查询条件进行查询!</a></li>
+                                                        </ul>
+                                                        <!-- $$edit$$:修改字段名称和for属性 -->
+                                                        <label for="roleid">角色：</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        <!--</form>validate="required:true" validatemsg="required: 请选择角色"-->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>权限列表</h4>
+                                            </div>
+                                            <div class="card-block">
+                                                <!-- If you put a checkbox in thead section, it will automatically toggle all tbody section checkboxes -->
+                                                <table class="js-table-checkable table table-vcenter table-hover">
+                                                    <tbody>
+                                                    <tr th:each="data ,dataStat: ${permissionList}">
+                                                        <td>
+                                                            <p class="font-500 m-b-0" th:text="${data.itemname}+'/'+${data.permissionname}">权限名</p>
+                                                            <p class="text-muted m-b-0" th:text="'关键字：'+${data.item}+'/'+${data.permission}">关键字</p>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <label class="css-input css-checkbox css-checkbox-default">
+                                                                <input type="checkbox" name="permission" th:value="${data.id}" checked="checked" th:checked="${rolePermissionMap.containsKey(data.id)}"
+                                                                       th:attr="data-url='/role/empower.do',data-params='roleid='+${role.id}+'&permissionid='+${data.id}"><span></span>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- .card-block -->
+                                        </div>
+
+                                    </div>
+                                    <!-- .card-block -->
+                                </div>
+                                <!-- .card -->
+                                <!-- End Material Forms Validation -->
+                            </div>
+                            <!-- .col-lg-6 -->
+                        </div>
+                        <!-- .row -->
+                    </div>
+                    <!-- .container-fluid -->
+                    <!-- End Page Content -->
+                </div>
+            </code>
+
+        </main>
+    </div>
+</div>
+
+
+<!-- 加载外部来源js文件 -->
+<script th:src="@{/js/jquery-2.2.4.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/core/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/core/jquery.scrollLock.min.js}"></script>
+<script th:src="@{/js/core/jquery.placeholder.min.js}"></script>
+<script th:src="@{/js/core/app.js(t=1001)}"></script>
+<script th:src="@{/js/core/app.js(t=1001)}"></script>
+<script th:src="@{/js/jquery.validate.min.js}"></script>
+<script th:src="@{/js/pages/base_forms_validation.js(t=1002)}"></script>
+
+<!-- 加载自写js文件 -->
+<script th:src="@{/js/index.js(t=20181056)}"></script>
+<script th:src="@{/js/ckjs.js(t=2018103)}"></script>
+
+
+
+</body>
+
+</html>

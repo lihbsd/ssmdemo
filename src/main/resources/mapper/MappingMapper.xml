@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ckjs.ssmdemo.dao.MappingDao">
+
+    <select id="findByKeyword" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and concat(sourcetype,source,targettype,target) LIKE '%' #{keyword} '%' order by targettype,modifytime desc
+    </select>
+
+    <select id="findByTarget" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and target = #{target} order by targettype,modifytime desc
+    </select>
+
+    <select id="findBySource" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and source = #{source} order by targettype,modifytime desc
+    </select>
+
+    <select id="findByTargettype" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and targettype = #{targettype} order by targettype,modifytime desc
+    </select>
+
+    <select id="findBySourcetype" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and sourcetype = #{sourcetype} order by targettype,modifytime desc
+    </select>
+
+    <select id="findByTargetAndType" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and targettype = #{targettype} and target = #{target} order by targettype,modifytime desc
+    </select>
+
+    <select id="findBySourceAndType" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and sourcetype = #{sourcetype} and source = #{source} order by targettype,modifytime desc
+    </select>
+
+    <select id="findById" resultType="Mapping">
+        SELECT * FROM t_mapping WHERE isdelete = 0 and id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Mapping">
+        insert into t_mapping(sourcetype,source,targettype,target,creator,modifier) values(#{sourcetype},#{source},#{targettype},#{target},#{creator},#{modifier})
+    </insert>
+
+    <update id="update" parameterType="Mapping" >
+        update t_mapping set sourcetype=#{sourcetype},source=#{source},targettype=#{targettype},target=#{target},modifier=#{modifier} where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="Mapping" >
+        update t_mapping set isdelete=1,modifier=#{modifier} where id=#{id}
+    </update>
+
+</mapper>

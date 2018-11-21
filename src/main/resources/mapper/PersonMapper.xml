@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ckjs.ssmdemo.dao.PersonDao">
+
+    <select id="findFromAjax" resultType="Person">
+        SELECT person.*  ,region.name as regionname FROM t_person person left join t_region region  on person.regionid = region.id where person.isdelete = 0 and (concat(person.name,person.nickname) LIKE '%' #{keyword} '%' or phone = #{keyword} or email = #{keyword} ) order by modifytime desc
+    </select>
+
+    <select id="findByKeyword" resultType="Person">
+         SELECT person.*  ,region.name as regionname FROM t_person person left join t_region region  on person.regionid = region.id where person.isdelete = 0 and (concat(person.name,person.nickname) LIKE '%' #{keyword} '%' or phone = #{keyword} or email = #{keyword} ) order by modifytime desc
+    </select>
+
+    <select id="findById" resultType="Person">
+        SELECT person.*  ,region.name as regionname FROM t_person person left join t_region region  on person.regionid = region.id where person.isdelete = 0 and person.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Person">
+        insert into t_person(name,nickname,phone,email,wechatnumber,gender,birthdate,regionid,identitytype,identitynumber,role,creator,modifier) values(#{name},#{nickname},#{phone},#{email},#{wechatnumber},#{gender},#{birthdate},#{regionid},#{identitytype},#{identitynumber},#{role},#{creator},#{modifier})
+    </insert>
+
+
+    <update id="update" parameterType="Person" >
+        update t_person set name=#{name},nickname=#{nickname},phone=#{phone},email=#{email},wechatnumber=#{wechatnumber},gender=#{gender},birthdate=#{birthdate},regionid=#{regionid},identitytype=#{identitytype},identitynumber=#{identitynumber},role=#{role},modifier=#{modifier} where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="Person" >
+        update t_person set isdelete=1,modifier=#{modifier} where id=#{id}
+    </update>
+
+</mapper>

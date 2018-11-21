@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>region</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/ckjs.css(t=2018007)}"></link>
+    <script th:src="@{/js/jquery-2.2.4.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/ckjs.js(t=20181034997)}"></script>
+</head>
+<body class="container">
+<h3>地区设置</h3>
+<br>
+<!--定义一个访问类名称，简化工作，比如region/findAll.do，把region统一定义为requestname，每个页面复制后修改一处即可-->
+<div th:with="requestname='region'">
+<div>
+    <form class="form-horizontal"   th:action="'/'+${requestname}+'/'+@{edit.do}" th:object="${region}"  method="post" >
+        <input type="hidden" name="mark" th:value="${mark}" />
+        <input type="hidden" name="keyword" th:value="${keyword}" />
+        <input type="hidden" name="id" th:value="${mark}=='add'?'':*{id}" />
+
+        <div class="form-group">
+            <label for="superName" class="col-sm-2 control-label">地区编码：</label>
+            <div class="col-sm-10" name="code">
+                <input type="text" class="form-control form-control-right"  id="code" name="code" th:value="${mark}=='add'?'':*{code}" th:placeholder="${mark}=='view'?'':'输入6位地区编码'" th:attr="isreadonly=(${mark}=='view'?'readonly':'')"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="superName" class="col-sm-2 control-label">地区名称：</label>
+            <div class="col-sm-10" name="name">
+                <input type="text" class="form-control form-control-right"  id="name" name="name" th:value="${mark}=='add'?'':*{name}" th:placeholder="${mark}=='view'?'':'请输入地区名称'"  th:attr="isreadonly=(${mark}=='view'?'readonly':'')"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="superName" class="col-sm-2 control-label">行政级别：</label>
+            <div class="col-sm-10" name="level">
+                <!--查看时显示文本框，编辑新增时显示下拉选择框-->
+                <input type="text" class="form-control form-control-right"  id="level" name="level" th:value="${typeMap[region.level]}" th:if="${mark}=='view'" th:attr="isreadonly=(${mark}=='view'?'readonly':'')" />
+                <select class="form-control form-control-right" id="level" name="level"  th:if="${mark}!='view'" >
+                    <option value="0" class="form-control-right">请选择行政级别</option>
+                    <option th:each="typeMap : ${typeMap}" th:value="${typeMap.key}"  th:text="${typeMap.value}" th:selected="${mark}=='add'?false:${typeMap.key}==*{level}">1</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="superName" class="col-sm-2 control-label">上级地区：</label>
+            <div class="col-sm-10" name="superid">
+                <!--动态选择框实际上传的数据-->
+                <input type="hidden" id="superid" name="superid" th:value="${mark}=='add'?'':*{superid}" />
+                <!--动态选择框，显示名称，foreignkey属性触发动态加载选项，并指定选项的来源对象-->
+                <input type="text" class="form-control form-control-right"  id="superName" name="superName" forid="superid" forname="superName" foreignkey="region" th:value="${mark}=='add'?'':*{supername}" th:placeholder="${mark}=='view'?'':'请选择上级地区'"  th:attr="isreadonly=(${mark}=='view'?'readonly':'')"/>
+                <!--forname,forid属性用来指定选择选项后要写入的字段id，  id输入框、显示输入框、以及ul选项都通过forid，forname字段关联，属性内容不能错误-->
+                <ul class="list-unstyled hidden" forid="superid" forname="superName">
+                    <li><a href="#" class="list-group-item list-group-item-ckjs text-warning" >请输入查询条件进行查询!</a></li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="提交" class="btn btn-info" th:unless="${mark}=='view'"/>
+                &nbsp; &nbsp; &nbsp;
+                <a href="javascript:history.go(-1);"  class="btn btn-info" th:unless="${mark}=='view'">取消</a>
+                <a href="/type/toEdit.do" th:href="'/'+${requestname}+'/'+@{toEdit.do(id=*{id},keyword=${keyword})}" class="btn btn-info" th:if="${mark}=='view'" >修改</a>
+                &nbsp; &nbsp; &nbsp;
+                <a href="/type/toEdit.do" th:href="'/'+${requestname}+'/'+@{delete.do(id=*{id},keyword=${keyword})}" class="btn btn-info" th:if="${mark}=='view'" onclick="javascript:if(confirm('删除后无法恢复，请确定是否删除？')) { return true;}else{return false;};">删除</a>
+                &nbsp; &nbsp; &nbsp;
+                <a href="/type/findAll.do" th:href="'/'+${requestname}+'/'+@{findAll.do(keyword=${keyword})}" class="btn btn-info" th:if="${mark}=='view'">返回列表</a>
+            </div>
+
+        </div>
+    </form>
+</div>
+</div>
+</body>
+</html>

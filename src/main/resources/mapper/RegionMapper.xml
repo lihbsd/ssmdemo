@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ckjs.ssmdemo.dao.RegionDao">
+
+    <select id="findBySuperid" resultType="Region">
+        SELECT region.* ,sregion.name as supername FROM t_region region ,t_region sregion WHERE region.superid = sregion.id and region.isdelete = 0 and region.superid=#{superid} order by region.code
+    </select>
+
+    <select id="findByStartup" resultType="Region">
+        SELECT region.* ,sregion.name as supername FROM t_region region ,t_region sregion WHERE region.superid = sregion.id and region.isdelete = 0 and region.startup=#{startup} order by region.code
+    </select>
+
+    <select id="findFromAjax" resultType="Region">
+        SELECT region.* ,sregion.name as supername FROM t_region region ,t_region sregion  WHERE region.superid = sregion.id and region.isdelete = 0 and (concat(region.code,region.name) LIKE '%' #{keyword} '%' and region.level like '%' #{level} '%' ) order by region.code
+    </select>
+
+    <select id="findByKeyword" resultType="Region">
+        SELECT region.* ,sregion.name as supername FROM t_region region ,t_region sregion  WHERE region.superid = sregion.id and region.isdelete = 0 and (concat(region.code,region.name) LIKE '%' #{keyword} '%' or sregion.name like '%' #{keyword} '%' ) order by region.code
+    </select>
+
+    <select id="findById" resultType="Region">
+        SELECT region.*  ,sregion.name as supername FROM t_region region ,t_region sregion  WHERE region.superid = sregion.id and region.isdelete = 0 and region.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Region">
+        insert into t_region(code,name,level,superid,startup,remark,creator,modifier) values(#{code},#{name},#{level},#{superid},#{startup},#{remark},#{creator},#{modifier})
+    </insert>
+
+    <update id="update" parameterType="Region" >
+        update t_region set code=#{code},name=#{name},level=#{level},superid=#{superid},startup=#{startup},remark=#{remark},modifier=#{modifier} where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="Region" >
+        update t_region set isdelete=1,modifier=#{modifier} where id=#{id}
+    </update>
+
+</mapper>

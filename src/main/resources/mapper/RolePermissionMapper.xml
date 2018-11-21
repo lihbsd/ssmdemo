@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ckjs.ssmdemo.dao.RolePermissionDao">
+
+    <select id="findByRoleid" resultType="RolePermission">
+        SELECT a.*  FROM t_role_permission a where a.isdelete = 0 and roleid=#{roleid} order by a.modifytime desc
+    </select>
+
+    <select id="findById" resultType="RolePermission">
+        SELECT a.*  FROM t_role_permission a where a.isdelete = 0 and a.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="RolePermission">
+        insert into t_role_permission(roleid,permissionid,remark,creator,modifier)
+        values(#{roleid},#{permissionid},#{remark},#{creator},#{modifier})
+    </insert>
+
+
+    <update id="delete" parameterType="RolePermission" >
+        delete from t_role_permission where roleid=#{roleid} and permissionid=#{permissionid}
+    </update>
+
+</mapper>

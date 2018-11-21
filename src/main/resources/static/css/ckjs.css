@@ -1,0 +1,16 @@
+.form-control-right {
+    width:100%;
+    text-align:right;
+    text-align-last: right;
+}
+.form-control[readonly]{
+    background-color:#fcfcfc;
+}
+
+.keyword{
+    width: 80%;
+}
+.nospace{
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}

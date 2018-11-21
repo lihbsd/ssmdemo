@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="author" content="ckjs"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <!--$$edit$$:修改页面标题-->
+    <title>角色列表</title>
+
+    <link rel="stylesheet" id="css-bootstrap" th:href="@{/css/bootstrap.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/app.css(t=2018003)}"></link>
+    <link rel="stylesheet" th:href="@{/css/ionicons.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/googlefonts.css}"></link>
+    <link rel="stylesheet" th:href="@{/css/ckjs.css(t=2018011)}"></link>
+
+    <!--这里写当前页面特有的CSS格式-->
+    <style>
+    </style>
+</head>
+
+<body class="app-ui layout-has-drawer layout-has-fixed-header">
+<div class="app-layout-canvas">
+    <div class="app-layout-container">
+        <main class="app-layout-content">
+
+            <code>
+                <!--$$edit$$:修改模块标识-->
+                <div id="content" th:with="requestname='role'">
+
+
+                    <!-- Page Content -->
+                    <div class="container-fluid p-y-md">
+                        <div class="row">
+                            <div class="col-sm-7 col-lg-9">
+                                <!-- Data List -->
+                                <div class="card">
+                                    <!--标题栏-->
+                                    <div class="card-header">
+                                        <div class="h4">角色列表</div>
+                                        <ul class="card-actions">
+                                            <li>
+                                                <a title="新增" th:href="'/'+${requestname}+'/toadd.do'"><span class="glyphicon glyphicon-plus" style="color: rgb(0, 91, 23);"> 新增</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-block">
+                                        <!--查询栏-->
+                                        <div>
+                                            <form class="navbar-form navbar-left app-search-form" role="search"
+                                                  id="searchform" name="searchform"
+                                                  th:action="'/'+${requestname}+'/'+'list.do'" method="post">
+                                                <!--页码参数-->
+                                                <input type="hidden" id="pageNum" name="pageNum"
+                                                       th:value="${page.pageNum}"/>
+                                                <input type="hidden" id="pageSize" name="pageSize"
+                                                       th:value="${page.pageSize}"/>
+                                                <input type="hidden" id="pages" name="pages"
+                                                       th:value="${page.pages}"/>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input class="form-control" type="search" id="keyword"
+                                                               name="keyword" th:value="${keyword}"
+                                                               placeholder="Search..."/>
+                                                        <span class="input-group-btn">
+								                            <button class="btn" type="submit"><i
+                                                                    class="ion-ios-search-strong">查询</i></button>
+							                            </span>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="pull-r-l">
+                                            <table class="js-table-checkable table table-hover table-vcenter m-b-0" id="datatable">
+                                                <tbody>
+                                                <tr th:each="data ,dataStat: ${dataList}">
+                                                    <td class="hidden-xs font-500" scope="row"
+                                                        th:text="${(page.getPageNum()-1)*10+dataStat.count}">
+                                                        行号
+                                                    </td>
+
+                                                    <!--$$edit$$:修改显示的数据内容-->
+                                                    <td>
+                                                        <a class="font-500 strong"
+                                                           th:href="'/'+${requestname}+'/'+@{view.do(id=${data.id},keyword=${keyword})}"
+                                                           th:text="${data.rolename}"></a>
+                                                        <div class="text-muted">
+                                                            <p class="nospace"
+                                                               th:text="'类型：'+${data.roletype==null?'':typeMap[data.roletype]}"></p>
+                                                            <p class="nospace" th:text="'说明：'+${data.remark}"></p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- End Data -->
+                                    </div>
+                                    <!-- .card-block -->
+                                    <!--底部加载，存在loadmore加载,全部加载后显示已全部加载，下拉加载失效-->
+                                    <div class="card-footer text-muted">
+                                        <div id="loadmore" class="text-center" th:if="${page.getPageNum()<page.getPages()}"><a th:href="'/'+${requestname}+'/list.do?keyword='+${keyword}+'&pageNum=1&pageSize='+${(pageNum+1)*10}">点击加载更多</a></div>
+                                        <div id="loadover" class="text-center" th:if="${page.getPageNum()==page.getPages()}">已加载全部数据</div>
+                                    </div>
+                                </div>
+                                <!-- .card -->
+                                <!-- End Data List -->
+                            </div>
+                            <!-- .col-sm-7 -->
+                        </div>
+                        <!-- .row -->
+                    </div>
+                    <!-- .container-fluid -->
+                    <!-- End Page Content -->
+                </div>
+            </code>
+
+        </main>
+    </div>
+</div>
+
+
+<!-- 加载外部来源js文件 -->
+<script src="static/js/jquery-2.2.4.min.js"></script>
+<script src="static/js/core/jquery.slimscroll.min.js"></script>
+<script src="static/js/core/jquery.scrollLock.min.js"></script>
+<script src="static/js/core/jquery.placeholder.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/core/app.js?t=1001"></script>
+
+<!-- 加载自写js文件 -->
+<!--<script th:src="@{/js/index.js(t=201810359995)}"></script>-->
+<script th:src="@{/js/ckjs.js(t=2018103498)}"></script>
+
+</body>
+</html>
+

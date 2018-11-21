@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ckjs.ssmdemo.dao.TypeDao">
+
+    <select id="findAll" resultType="Type">
+        SELECT * FROM t_type WHERE isdelete = 0 order by sign,number
+    </select>
+
+    <select id="findByKeyword" resultType="Type">
+        SELECT * FROM t_type WHERE isdelete = 0 and concat(sign,code,name) LIKE '%' #{keyword} '%' order by sign,number
+    </select>
+
+    <select id="findBySign" resultType="Type">
+        SELECT * FROM t_type WHERE isdelete = 0 and sign = #{sign} order by number
+    </select>
+
+    <select id="findById" resultType="Type">
+        SELECT * FROM t_type WHERE isdelete = 0 and id = #{id}
+    </select>
+
+    <select id="findByCode" resultType="Type">
+        SELECT * FROM t_type WHERE isdelete = 0 and code = #{code}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Type">
+        insert into t_type(sign,code,name,number,remark,creator,modifier) values(#{sign},#{code},#{name},#{number},#{remark},#{creator},#{modifier})
+    </insert>
+
+    <update id="update" parameterType="Type" >
+        update t_type set sign=#{sign},code=#{code},name=#{name},number=#{number},remark=#{remark},modifier=#{modifier} where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="Type" >
+        update t_type set isdelete=1,modifier=#{modifier} where id=#{id}
+    </update>
+
+</mapper>
